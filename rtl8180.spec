@@ -19,6 +19,7 @@ Source0:	ftp://pld:pld@213.186.71.170/pub/rtl8180/rtl8180_linuxdrv_v13.zip
 URL:		http://www.realtek.com.tw/downloads/downloads1-3.aspx?software=True&compamodel=RTL8180L
 %{!?_without_dist_kernel:BuildRequires:	kernel-headers >= 2.4.0}}
 BuildRequires:	rpmbuild(macros) >= 1.118
+BuildRequires:	unzip
 %{!?_without_dist_kernel:%requires_releq_kernel_up}
 Requires(post,postun):	/sbin/depmod
 Obsoletes:	kernel-net-rtl8180_24x
