@@ -17,9 +17,7 @@ Source0:	ftp://202.65.194.18/cn/wlan/rtl8180l/rtl8180_linuxdrv_v15_rh90.zip
 Patch0:		%{name}-Makefile.patch
 Patch1:		%{name}-timer.patch
 URL:		http://www.realtek.com.tw/downloads/downloads1-3.aspx?software=True&compamodel=RTL8180L
-%if %{with dist_kernel}
-BuildRequires:	kernel-module-build
-%endif
+%{?with_dist_kernel:BuildRequires:	kernel-module-build >= 2.6.7}
 BuildRequires:	rpmbuild(macros) >= 1.153
 BuildRequires:	unzip
 %{?with_dist_kernel:%requires_releq_kernel_up}
