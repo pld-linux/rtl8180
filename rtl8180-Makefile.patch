@@ -97,4 +97,4 @@
 -	mv priv_part priv_part.o
 -
 +obj-m := rtl8180_24x.o
-+rtl8180_24x-objs := r8180_pci_init.o r8180_if.o
++rtl8180_24x-objs := r8180_pci_init.o r8180_if.o priv_part.o
