@@ -1,0 +1,47 @@
+--- rtl8180_1.5/r8180_if.h.orig	2003-11-24 16:53:40.000000000 +0100
++++ rtl8180_1.5/r8180_if.h	2004-05-23 00:36:19.726839232 +0200
+@@ -93,9 +93,9 @@
+ unsigned long GetCurTime(void);
+ 
+ 
+-int rtl_request_timer( timer_t *timer, unsigned long timer_expires, void *timer_func, void *timer_data );
+-void rtl_delete_timer( timer_t *del_timer_t );
+-int rtl_check_timer( timer_t *timer );
++int rtl_request_timer( struct timer_list *timer, unsigned long timer_expires, void *timer_func, void *timer_data );
++void rtl_delete_timer( struct timer_list *del_timer_t );
++int rtl_check_timer( struct timer_list *timer );
+ int rtl_mod_timer(struct timer_list *timer, unsigned long expires);
+ 
+ int rtl8180_open(struct net_device *dev);
+--- rtl8180_1.5/r8180_if.c.orig	2003-11-24 16:53:40.000000000 +0100
++++ rtl8180_1.5/r8180_if.c	2004-05-23 00:40:31.263599832 +0200
+@@ -391,7 +391,7 @@
+ //===========================================================================
+ int	timer_cnt = 0;
+ //---------------------------------------------------------------
+-int rtl_request_timer( timer_t *timer, unsigned long timer_expires, void *timer_func, void *timer_data )
++int rtl_request_timer( struct timer_list *timer, unsigned long timer_expires, void *timer_func, void *timer_data )
+ {
+ 	init_timer(timer);
+ 	timer->expires = (unsigned long)(jiffies + timer_expires);
+@@ -410,7 +410,7 @@
+ 
+ //===========================================================================
+ //===========================================================================
+-void rtl_delete_timer( timer_t *del_timer_t )
++void rtl_delete_timer( struct timer_list *del_timer_t )
+ {
+ 	del_timer(del_timer_t);
+ 	timer_cnt--;
+@@ -420,9 +420,9 @@
+ 
+ //===========================================================================
+ //===========================================================================
+-int rtl_check_timer( timer_t *timer )
++int rtl_check_timer( struct timer_list *timer )
+ {
+-	if( (timer->list.next == NULL) && (timer->list.prev == NULL) ){
++	if( (timer->entry.next == NULL) && (timer->entry.prev == NULL) ){
+ 		return 1;
+ 	}
+ 	return 0;

@@ -1,0 +1,100 @@
+--- rtl8180_1.5/Makefile.orig	2003-11-24 16:53:40.000000000 +0100
++++ rtl8180_1.5/Makefile	2004-05-23 00:28:56.437229496 +0200
+@@ -1,20 +1,3 @@
+-
+-#-----------------------------------------------
+-#Specify kernel version and include path
+-#-----------------------------------------------
+-KERNELRELEASE=$(shell uname -r)
+-INCLUDEPATH=-I /usr/src/linux-$(KERNELRELEASE)/include/
+-INSTALLPATH=/lib/modules/$(KERNELRELEASE)/kernel/drivers/net/wireless
+-
+-
+-#-----------------------------------------------
+-#Specify compiler and compile flags.
+-#-----------------------------------------------
+-XCC = gcc
+-LD = ld
+-MODCFLAGS := -O6 -Wall -DMODULE -D__KERNEL__ -DLINUX
+-
+-
+ #-----------------------------------------------
+ #IO_FLAGS
+ #Specify pci I/O space mapping
+@@ -22,8 +5,11 @@
+ #RTL_IO_MAP is the suggestion since ioremap 
+ #would fail. 
+ #-----------------------------------------------
+-#IO_FLAGS = RTL_MEM_MAP
++ifdef CONFIG_NOHIGHMEM
+ IO_FLAGS = RTL_IO_MAP
++else
++IO_FLAGS = RTL_MEM_MAP
++endif
+ 
+ #-----------------------------------------------
+ #ENDIAN_FLAGS
+@@ -40,61 +26,5 @@
+ #OP_MODE_FLAGS = RTL_ACT_AS_AP
+ OP_MODE_FLAGS = RTL_ACT_AS_STA
+ 
+-
+-
+-#-----------------------------------------------
+-# Wireless LAN driver flags.
+-#-----------------------------------------------
+-DRV_FLAGS = -D$(IO_FLAGS) -D$(ENDIAN_FLAGS) -D${OP_MODE_FLAGS} -DRTL8180_DRV_ON_PC -DENABLE_DBG_PRINT
+-
+-
+-#-----------------------------------------------
+-# Driver Target
+-#-----------------------------------------------
+-RTL8180_TARGET = rtl8180_24x.o
+-
+-
+-#-----------------------------------------------
+-#module initialization and interface.
+-#-----------------------------------------------
+-OPEN_SRCS = r8180_pci_init.c r8180_if.c
+-
+-OPEN_OBJS = ${OPEN_SRCS:.c=.o}
+-
+-
+-
+-# SUFFIXES fules
+-.SUFFIXES: .c .o
+-.c.o:
+-	$(XCC) $(MODCFLAGS) $(INCLUDEPATH) ${DRV_FLAGS} -c -o $*.o $<
+-
+-
+-#.PHONY: all clean
+-
+-all: $(RTL8180_TARGET)
+-
+-
+-$(RTL8180_TARGET): open_part
+-	@echo "--- Generate rtl8180 linux driver  $(RTL8180_TARGET) on $(KERNELRELEASE) ---"
+-	@$(LD) -r -o $@ ${^:=.o} priv_part.o
+-	@rm -f ${^:=.o};
+-	@echo ""
+-
+-open_part: ${OPEN_OBJS}
+-	@echo "--- Generate open part open_part.o ---"
+-	@$(LD) -r -o $@.o ${OPEN_OBJS}
+-	@rm -f ${OPEN_OBJS}
+-	@echo ""
+-
+-
+-${OPEN_OBJS}: %.o: %.h r8180_type.h r8180_export.h
+-
+-install:
+-	cp $(RTL8180_TARGET) $(INSTALLPATH)
+-
+-
+-clean:
+-	mv priv_part.o priv_part;\
+-	rm -f *.o;\
+-	mv priv_part priv_part.o
+-
++obj-m := rtl8180_24x.o
++rtl8180_24x-objs := r8180_pci_init.o r8180_if.o
