@@ -3,14 +3,12 @@
 # _without_dist_kernel          without distribution kernel
 #
 # TODO:
-# - mv kernel-net-rlt8180.spec,v kernel-net-rtl8180.spec,v
-# - remove "_24x" from Name
 # - UP/SMP scheme, pass CC and CFLAGS
 %define		_orig_name	rtl8180_24x
 
 Summary:	Linux driver for WLAN card base on RTL8180
 Summary(pl):	Sterownik dla Linuksa do kart bezprzewodowych na uk³adzie RTL8180
-Name:		kernel-net-%{_orig_name}
+Name:		kernel-net-rtl8180
 Version:	1.3
 %define	_rel	0.4
 Release:	%{_rel}@%{_kernel_ver_str}
@@ -23,6 +21,7 @@ URL:		http://www.realtek.com.tw/downloads/downloads1-3.aspx?software=True&compam
 BuildRequires:	rpmbuild(macros) >= 1.118
 %{!?_without_dist_kernel:%requires_releq_kernel_up}
 Requires(post,postun):	/sbin/depmod
+Obsoletes:	kernel-net-rtl8180_24x
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -32,7 +31,7 @@ This is driver for WLAN card based on RTL8180 for Linux.
 Sterownik dla Linuksa do kart WLAN opartych o uk³ad RTL8180.
 
 %prep
-%setup -q -c %{name}-%{version}
+%setup -q -c
 
 %build
 %{__make} -C release
