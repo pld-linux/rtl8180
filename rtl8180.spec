@@ -1,0 +1,58 @@
+#
+# Conditional build:
+# _without_dist_kernel          without distribution kernel
+#
+%define		_orig_name	rlt8180
+
+Summary:	Linux driver for the 3Com 3C90x and 3C980 Network Interface Cards
+Summary(pl):	Sterownik dla Linuksa do kart sieciowych 3Com 3C90x i 3C980
+Name:		kernel-net-%{_orig_name}
+Version:	1.2
+%define	_rel	0.1
+Release:	%{_rel}@%{_kernel_ver_str}
+License:	GPL
+Group:		Base/Kernel
+#Source0:	ftp://152.104.125.40/cn/wlan/rtl8180l/%{_orig_name}_linuxdrv_v12_rh80.zip
+Source0:	ftp://152.104.125.40/cn/wlan/rtl8180l/rtl8180_linuxdrv_v12_rh80.zip
+# Source0-md5:	6d73d3841fb5ff0bcbf3e9cbaf673f16
+URL:		http://www.realtek.com.tw/downloads/downloads1-3.aspx?software=True&compamodel=RTL8180L
+%{!?_without_dist_kernel:BuildRequires:         kernel-headers }
+BuildRequires:	rpmbuild(macros) >= 1.118
+%{!?_without_dist_kernel:%requires_releq_kernel_up}
+Requires(post,postun):	/sbin/depmod
+BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+%description
+This is driver for WLAN card based on rlt8180 for Linux.
+
+%description -l pl
+Sterownik dla Linuksa do kart WLAN opartych o chip rlt8180
+
+%prep
+%setup -q -c %{name}-%{version}
+
+%build
+cd release
+rm -f *.o
+#%{__make} -I%{_kernelsrcdir}/include
+%{__make}  CC="%{kgcc} -DCONFIG_X86_LOCAL_APIC -DSTB_WA" KSRC=%{_kernelsrcdir}
+mv priv_part.o %{_orig_name}.o
+
+%install
+rm -rf $RPM_BUILD_ROOT
+install -d $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/misc
+install %{_orig_name}.o $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/misc/%{_orig_name}.o
+
+%clean
+rm -rf $RPM_BUILD_ROOT
+
+%post
+%depmod %{_kernel_ver}
+
+%postun
+%depmod %{_kernel_ver}
+
+%files
+%defattr(644,root,root,755)
+%doc readme
+/lib/modules/%{_kernel_ver}/misc/*
