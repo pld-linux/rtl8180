@@ -1,26 +1,29 @@
 #
 # Conditional build:
-# _without_dist_kernel          without distribution kernel
+%bcond_without	dist_kernel	# allow non-distribution kernel
+%bcond_without	smp		# don't build SMP module
+%bcond_with	verbose		# verbose build (V=1)
 #
-# TODO:
-# - UP/SMP scheme, pass CC and CFLAGS
-%define		_orig_name	rtl8180_24x
-
 Summary:	Linux driver for WLAN card base on RTL8180
 Summary(pl):	Sterownik dla Linuksa do kart bezprzewodowych na uk³adzie RTL8180
 Name:		kernel-net-rtl8180
-Version:	1.3
-%define	_rel	0.4
+Version:	1.5
+%define		_rel	0.9
 Release:	%{_rel}@%{_kernel_ver_str}
 License:	GPL
 Group:		Base/Kernel
-Source0:	ftp://pld:pld@213.186.71.170/pub/rtl8180/rtl8180_linuxdrv_v13.zip
-# Source0-md5:	216d363e09f2b00ff6ededd495d0757a
+#Source0:	ftp://pld:pld@213.186.71.170/pub/rtl8180/rtl8180_linuxdrv_v13.zip
+Source0:	ftp://202.65.194.18/cn/wlan/rtl8180l/rtl8180_linuxdrv_v15_rh90.zip
+# Source0-md5:	85ae591e666c458570ab111cdb39fadb
+Patch0:		%{name}-Makefile.patch
+Patch1:		%{name}-timer.patch
 URL:		http://www.realtek.com.tw/downloads/downloads1-3.aspx?software=True&compamodel=RTL8180L
-%{!?_without_dist_kernel:BuildRequires:	kernel-headers >= 2.4.0}
+%if %{with dist_kernel}
+BuildRequires:	kernel-module-build
+%endif
 BuildRequires:	rpmbuild(macros) >= 1.118
 BuildRequires:	unzip
-%{!?_without_dist_kernel:%requires_releq_kernel_up}
+%{?with_dist_kernel:%requires_releq_kernel_up}
 Requires(post,postun):	/sbin/depmod
 Obsoletes:	kernel-net-rtl8180_24x
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -31,16 +34,56 @@ This is driver for WLAN card based on RTL8180 for Linux.
 %description -l pl
 Sterownik dla Linuksa do kart WLAN opartych o uk³ad RTL8180.
 
+%package -n kernel-smp-net-rtl8180
+Summary:	Linux driver for WLAN card base on RTL8180
+Summary(pl):	Sterownik dla Linuksa do kart bezprzewodowych na uk³adzie RTL8180
+Release:	%{_rel}@%{_kernel_ver_str}
+Group:		Base/Kernel
+%{?with_dist_kernel:%requires_releq_kernel_smp}
+Requires(post,postun):	/sbin/depmod
+
+%description -n kernel-smp-net-rtl8180
+This is driver for WLAN card based on RTL8180 for Linux.
+
+This package contains Linux SMP module.
+
+%description -n kernel-smp-net-rtl8180 -l pl
+Sterownik dla Linuksa do kart WLAN opartych o uk³ad RTL8180.
+
+Ten pakiet zawiera modu³ j±dra Linuksa SMP.
+
 %prep
-%setup -q -c
+%setup -q -n rtl8180_1.5
+%patch0 -p1
+%patch1 -p1
 
 %build
-%{__make} -C release
+for cfg in %{?with_dist_kernel:%{?with_smp:smp} up}%{!?with_dist_kernel:nondist}; do
+    if [ ! -r "%{_kernelsrcdir}/config-$cfg" ]; then
+	exit 1
+    fi
+    rm -rf include
+    install -d include/{linux,config}
+    ln -sf %{_kernelsrcdir}/config-$cfg .config
+    ln -sf %{_kernelsrcdir}/include/linux/autoconf-$cfg.h include/linux/autoconf.h
+    touch include/config/MARKER
+    %{__make} -C %{_kernelsrcdir} clean modules \
+	RCS_FIND_IGNORE="-name '*.ko' -o -name priv_part.o -o" \
+	M=$PWD O=$PWD \
+	%{?with_verbose:V=1}
+    mv rtl8180_24x.ko rtl8180_24x-$cfg.ko
+done
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/misc
-install release/%{_orig_name}.o $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/misc/%{_orig_name}.o
+install -d $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}{,smp}/misc
+
+install rtl8180_24x-%{?with_dist_kernel:up}%{!?with_dist_kernel:nondist}.ko \
+	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/misc/rtl8180_24x.ko
+%if %{with smp} && %{with dist_kernel}
+install rtl8180_24x-smp.ko \
+	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}smp/misc/rtl8180_24x.ko
+%endif
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -51,7 +94,20 @@ rm -rf $RPM_BUILD_ROOT
 %postun
 %depmod %{_kernel_ver}
 
+%post -n kernel-smp-net-rtl8180
+%depmod %{_kernel_ver}
+
+%postun -n kernel-smp-net-rtl8180
+%depmod %{_kernel_ver}
+
 %files
 %defattr(644,root,root,755)
-#%doc readme
-/lib/modules/%{_kernel_ver}/misc/*
+%doc readme
+/lib/modules/%{_kernel_ver}/misc/*.ko*
+
+%if %{with smp} && %{with dist_kernel}
+%files -n kernel-smp-net-rtl8180
+%defattr(644,root,root,755)
+%doc readme
+/lib/modules/%{_kernel_ver}smp/misc/*.ko*
+%endif
