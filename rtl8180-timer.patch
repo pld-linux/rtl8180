@@ -1,20 +1,6 @@
---- rtl8180_1.5/r8180_if.h.orig	2003-11-24 16:53:40.000000000 +0100
-+++ rtl8180_1.5/r8180_if.h	2004-05-23 00:36:19.726839232 +0200
-@@ -93,9 +93,9 @@
- unsigned long GetCurTime(void);
- 
- 
--int rtl_request_timer( timer_t *timer, unsigned long timer_expires, void *timer_func, void *timer_data );
--void rtl_delete_timer( timer_t *del_timer_t );
--int rtl_check_timer( timer_t *timer );
-+int rtl_request_timer( struct timer_list *timer, unsigned long timer_expires, void *timer_func, void *timer_data );
-+void rtl_delete_timer( struct timer_list *del_timer_t );
-+int rtl_check_timer( struct timer_list *timer );
- int rtl_mod_timer(struct timer_list *timer, unsigned long expires);
- 
- int rtl8180_open(struct net_device *dev);
---- rtl8180_1.5/r8180_if.c.orig	2003-11-24 16:53:40.000000000 +0100
-+++ rtl8180_1.5/r8180_if.c	2004-05-23 00:40:31.263599832 +0200
+diff -urN rtl8180_1.5-orig/r8180_if.c rtl8180_1.5/r8180_if.c
+--- rtl8180_1.5-orig/r8180_if.c	2003-11-24 16:53:00.000000000 +0100
++++ rtl8180_1.5/r8180_if.c	2004-05-23 01:13:02.362800664 +0200
 @@ -391,7 +391,7 @@
  //===========================================================================
  int	timer_cnt = 0;
@@ -45,3 +31,35 @@
  		return 1;
  	}
  	return 0;
+diff -urN rtl8180_1.5-orig/r8180_if.h rtl8180_1.5/r8180_if.h
+--- rtl8180_1.5-orig/r8180_if.h	2003-11-24 16:53:00.000000000 +0100
++++ rtl8180_1.5/r8180_if.h	2004-05-23 01:13:02.359801120 +0200
+@@ -93,9 +93,9 @@
+ unsigned long GetCurTime(void);
+ 
+ 
+-int rtl_request_timer( timer_t *timer, unsigned long timer_expires, void *timer_func, void *timer_data );
+-void rtl_delete_timer( timer_t *del_timer_t );
+-int rtl_check_timer( timer_t *timer );
++int rtl_request_timer( struct timer_list *timer, unsigned long timer_expires, void *timer_func, void *timer_data );
++void rtl_delete_timer( struct timer_list *del_timer_t );
++int rtl_check_timer( struct timer_list *timer );
+ int rtl_mod_timer(struct timer_list *timer, unsigned long expires);
+ 
+ int rtl8180_open(struct net_device *dev);
+diff -urN rtl8180_1.5-orig/r8180_type.h rtl8180_1.5/r8180_type.h
+--- rtl8180_1.5-orig/r8180_type.h	2003-11-24 16:53:00.000000000 +0100
++++ rtl8180_1.5/r8180_type.h	2004-05-23 01:13:15.131859472 +0200
+@@ -145,10 +145,11 @@
+ /*=====================================================================================
+ type definition.
+ =====================================================================================*/
++/*
+ #ifndef timer_t
+ typedef struct timer_list timer_t;
+ #endif //#ifndef timer_t
+-
++*/
+ 
+ #define rtl_bool	unsigned char
+ #define rtl_uint8	unsigned char
