@@ -15,7 +15,7 @@ Group:		Base/Kernel
 Source0:	ftp://152.104.125.40/cn/wlan/rtl8180l/rtl8180_linuxdrv_v12_rh80.zip
 # Source0-md5:	6d73d3841fb5ff0bcbf3e9cbaf673f16
 URL:		http://www.realtek.com.tw/downloads/downloads1-3.aspx?software=True&compamodel=RTL8180L
-%{!?_without_dist_kernel:BuildRequires:          kernel-headers >= 2.4.0}}
+%{!?_without_dist_kernel:BuildRequires:	kernel-headers >= 2.4.0}}
 BuildRequires:	rpmbuild(macros) >= 1.118
 %{!?_without_dist_kernel:%requires_releq_kernel_up}
 Requires(post,postun):	/sbin/depmod
