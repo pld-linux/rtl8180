@@ -9,8 +9,8 @@ Summary(pl):	Sterownik dla Linuksa do kart bezprzewodowych na uk³adzie RTL8180
 Name:		rtl8180
 Version:	1.6
 %define		_rel	4
-Release:	%{_rel}@%{_kernel_ver_str}
-License:	GPL
+Release:	%{_rel}
+License:	GPL (interface) / closed source (actual driver)
 Group:		Base/Kernel
 Source0:	ftp://202.65.194.18/cn/wlan/rtl8180l/rtl8180_linuxdrv_v15_rh90.zip
 # Source0-md5:	85ae591e666c458570ab111cdb39fadb
@@ -20,15 +20,28 @@ URL:		http://www.realtek.com.tw/downloads/downloads1-3.aspx?software=True&compam
 %{?with_dist_kernel:BuildRequires:	kernel-module-build >= 2.6.7}
 BuildRequires:	rpmbuild(macros) >= 1.153
 BuildRequires:	unzip
-%{?with_dist_kernel:%requires_releq_kernel_up}
-Requires(post,postun):	/sbin/depmod
 Obsoletes:	kernel-net-rtl8180_24x
+ExclusiveArch:	%{ix86}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
 This is driver for WLAN card based on RTL8180 for Linux.
 
 %description -l pl
+Sterownik dla Linuksa do kart WLAN opartych o uk³ad RTL8180.
+
+%package -n kernel-net-rtl8180
+Summary:	Linux driver for WLAN card base on RTL8180
+Summary(pl):	Sterownik dla Linuksa do kart bezprzewodowych na uk³adzie RTL8180
+Release:	%{_rel}@%{_kernel_ver_str}
+Group:		Base/Kernel
+%{?with_dist_kernel:%requires_releq_kernel_up}
+Requires(post,postun):	/sbin/depmod
+
+%description -n kernel-net-rtl8180
+This is driver for WLAN card based on RTL8180 for Linux.
+
+%description -n kernel-net-rtl8180 -l pl
 Sterownik dla Linuksa do kart WLAN opartych o uk³ad RTL8180.
 
 %package -n kernel-smp-net-rtl8180
@@ -86,19 +99,19 @@ install rtl8180_24x-smp.ko \
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post
+%post -n kernel-net-rtl8180
 %depmod %{_kernel_ver}
 
-%postun
+%postun -n kernel-net-rtl8180
 %depmod %{_kernel_ver}
 
 %post -n kernel-smp-net-rtl8180
-%depmod %{_kernel_ver}
+%depmod %{_kernel_ver}smp
 
 %postun -n kernel-smp-net-rtl8180
-%depmod %{_kernel_ver}
+%depmod %{_kernel_ver}smp
 
-%files
+%files -n kernel-net-rtl8180
 %defattr(644,root,root,755)
 %doc readme
 /lib/modules/%{_kernel_ver}/misc/*.ko*
