@@ -12,7 +12,7 @@ Version:	1.3
 Release:	%{_rel}@%{_kernel_ver_str}
 License:	GPL
 Group:		Base/Kernel
-Source0:	ftp://pld:pld@213.186.71.170/pub/rtl8180_linuxdrv_v13.zip
+Source0:	ftp://pld:pld@213.186.71.170/pub/rtl8180/rtl8180_linuxdrv_v13.zip
 # Source0-md5:	216d363e09f2b00ff6ededd495d0757a
 URL:		http://www.realtek.com.tw/downloads/downloads1-3.aspx?software=True&compamodel=RTL8180L
 %{!?_without_dist_kernel:BuildRequires:	kernel-headers >= 2.4.0}}
