@@ -2,10 +2,14 @@
 # Conditional build:
 # _without_dist_kernel          without distribution kernel
 #
+# TODO:
+# - mv kernel-net-rlt8180.spec,v kernel-net-rtl8180.spec,v
+# - remove "_24x" from Name
+# - UP/SMP scheme, pass CC and CFLAGS
 %define		_orig_name	rtl8180_24x
 
-Summary:	Linux driver for WLAN card base on rtl8180
-Summary(pl):	Sterownik dla Linuksa do kart bezprzewodowych na chipie rtl8180
+Summary:	Linux driver for WLAN card base on RTL8180
+Summary(pl):	Sterownik dla Linuksa do kart bezprzewodowych na uk³adzie RTL8180
 Name:		kernel-net-%{_orig_name}
 Version:	1.3
 %define	_rel	0.4
@@ -22,17 +26,16 @@ Requires(post,postun):	/sbin/depmod
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
-This is driver for WLAN card based on rlt8180 for Linux.
+This is driver for WLAN card based on RTL8180 for Linux.
 
 %description -l pl
-Sterownik dla Linuksa do kart WLAN opartych o chip rlt8180
+Sterownik dla Linuksa do kart WLAN opartych o uk³ad RTL8180.
 
 %prep
 %setup -q -c %{name}-%{version}
 
 %build
-cd release
-%{__make}
+%{__make} -C release
 
 %install
 rm -rf $RPM_BUILD_ROOT
