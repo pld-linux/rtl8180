@@ -8,14 +8,14 @@ Summary:	Linux driver for the 3Com 3C90x and 3C980 Network Interface Cards
 Summary(pl):	Sterownik dla Linuksa do kart sieciowych 3Com 3C90x i 3C980
 Name:		kernel-net-%{_orig_name}
 Version:	1.2
-%define	_rel	0.2
+%define	_rel	0.3
 Release:	%{_rel}@%{_kernel_ver_str}
 License:	GPL
 Group:		Base/Kernel
 Source0:	ftp://152.104.125.40/cn/wlan/rtl8180l/rtl8180_linuxdrv_v12_rh80.zip
 # Source0-md5:	6d73d3841fb5ff0bcbf3e9cbaf673f16
 URL:		http://www.realtek.com.tw/downloads/downloads1-3.aspx?software=True&compamodel=RTL8180L
-%{!?_without_dist_kernel:BuildRequires:         kernel-headers }
+%{!?_without_dist_kernel:BuildRequires:          kernel-headers >= 2.4.0}}
 BuildRequires:	rpmbuild(macros) >= 1.118
 %{!?_without_dist_kernel:%requires_releq_kernel_up}
 Requires(post,postun):	/sbin/depmod
