@@ -1,5 +1,5 @@
 --- rtl8180_1.5/Makefile.orig	2003-11-24 16:53:40.000000000 +0100
-+++ rtl8180_1.5/Makefile	2004-05-23 00:28:56.437229496 +0200
++++ rtl8180_1.5/Makefile	2004-08-07 22:53:54.694065120 +0200
 @@ -1,20 +1,3 @@
 -
 -#-----------------------------------------------
@@ -21,28 +21,37 @@
  #-----------------------------------------------
  #IO_FLAGS
  #Specify pci I/O space mapping
-@@ -22,8 +5,11 @@
+@@ -22,17 +5,11 @@
  #RTL_IO_MAP is the suggestion since ioremap 
  #would fail. 
  #-----------------------------------------------
 -#IO_FLAGS = RTL_MEM_MAP
 +ifdef CONFIG_NOHIGHMEM
- IO_FLAGS = RTL_IO_MAP
-+else
 +IO_FLAGS = RTL_MEM_MAP
++else
+ IO_FLAGS = RTL_IO_MAP
+-
+-#-----------------------------------------------
+-#ENDIAN_FLAGS
+-#Specify memory access mothed. 
+-#RTL_LITTLE_ENDIAN is the suggestion on i386.
+-#-----------------------------------------------
+-#ENDIAN_FLAGS = RTL_BIG_ENDIAN
+-ENDIAN_FLAGS = RTL_LITTLE_ENDIAN
+-
 +endif
  
  #-----------------------------------------------
- #ENDIAN_FLAGS
-@@ -40,61 +26,5 @@
+ # Wireless LAN operation mode. 
+@@ -40,61 +17,13 @@
  #OP_MODE_FLAGS = RTL_ACT_AS_AP
  OP_MODE_FLAGS = RTL_ACT_AS_STA
  
 -
 -
--#-----------------------------------------------
--# Wireless LAN driver flags.
--#-----------------------------------------------
+ #-----------------------------------------------
+ # Wireless LAN driver flags.
+ #-----------------------------------------------
 -DRV_FLAGS = -D$(IO_FLAGS) -D$(ENDIAN_FLAGS) -D${OP_MODE_FLAGS} -DRTL8180_DRV_ON_PC -DENABLE_DBG_PRINT
 -
 -
@@ -90,11 +99,38 @@
 -install:
 -	cp $(RTL8180_TARGET) $(INSTALLPATH)
 -
--
++EXTRA_CFLAGS = -D$(IO_FLAGS) -D$(OP_MODE_FLAGS)
+ 
 -clean:
 -	mv priv_part.o priv_part;\
 -	rm -f *.o;\
 -	mv priv_part priv_part.o
++obj-m			:= rtl8180_24x.o
++rtl8180_24x-objs	:= priv_part.o r8180_pci_init.o r8180_if.o
+ 
++$(obj)/priv_part.o:
++	$(CP) $(src)/priv_part.o $(obj)/priv_part.o
+--- rtl8180_1.5/r8180_type.h.orig	2004-08-07 22:03:08.000000000 +0200
++++ rtl8180_1.5/r8180_type.h	2004-08-07 22:53:28.574035968 +0200
+@@ -39,21 +39,6 @@
+ 
+ 
+ 
+-//----------------------------------------------------------------------------------------------
+-// Endian
+-//----------------------------------------------------------------------------------------------
+-#ifndef RTL8180_DRV_ON_PC
 -
-+obj-m := rtl8180_24x.o
-+rtl8180_24x-objs := r8180_pci_init.o r8180_if.o priv_part.o
+-#define	RTL_BIG_ENDIAN	1
+-//#define RTL_LITTLE_ENDIAN	1
+-
+-#endif //end #ifndef RTL8180_DRV_ON_PC
+-
+-
+-
+-#if !defined(RTL_BIG_ENDIAN) && !defined(RTL_LITTLE_ENDIAN)
+-#error "Big/Little endian have NOT been defined!\n"
+-#endif
+ 
+ 
+ //----------------------------------------------------------------------------------------------
