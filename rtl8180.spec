@@ -13,6 +13,7 @@ Release:	%{_rel}@%{_kernel_ver_str}
 License:	GPL
 Group:		Base/Kernel
 Source0:	ftp://152.104.125.40/cn/wlan/rtl8180l/rtl8180_linuxdrv_v12_rh80.zip
+# Source0-md5:	6d73d3841fb5ff0bcbf3e9cbaf673f16
 URL:		http://www.realtek.com.tw/downloads/downloads1-3.aspx?software=True&compamodel=RTL8180L
 %{!?_without_dist_kernel:BuildRequires:         kernel-headers }
 BuildRequires:	rpmbuild(macros) >= 1.118
@@ -31,12 +32,12 @@ Sterownik dla Linuksa do kart WLAN opartych o chip rlt8180
 
 %build
 cd release
-%{__make} 
+%{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/misc
-install %{_orig_name}.o $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/misc/%{_orig_name}.o
+install release/%{_orig_name}.o $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/misc/%{_orig_name}.o
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -49,5 +50,5 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc readme
+#%doc readme
 /lib/modules/%{_kernel_ver}/misc/*
