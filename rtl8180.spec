@@ -7,13 +7,13 @@
 Summary:	Linux driver for WLAN card base on rtl8180
 Summary(pl):	Sterownik dla Linuksa do kart bezprzewodowych na chipie rtl8180
 Name:		kernel-net-%{_orig_name}
-Version:	1.2
+Version:	1.3
 %define	_rel	0.4
 Release:	%{_rel}@%{_kernel_ver_str}
 License:	GPL
 Group:		Base/Kernel
-Source0:	ftp://152.104.125.40/cn/wlan/rtl8180l/rtl8180_linuxdrv_v12_rh80.zip
-# Source0-md5:	6d73d3841fb5ff0bcbf3e9cbaf673f16
+Source0:	ftp://pld:pld@213.186.71.170/pub/rtl8180_linuxdrv_v13.zip
+# Source0-md5:	216d363e09f2b00ff6ededd495d0757a
 URL:		http://www.realtek.com.tw/downloads/downloads1-3.aspx?software=True&compamodel=RTL8180L
 %{!?_without_dist_kernel:BuildRequires:	kernel-headers >= 2.4.0}}
 BuildRequires:	rpmbuild(macros) >= 1.118
