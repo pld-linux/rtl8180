@@ -5,8 +5,7 @@
 %define		_orig_name	rtl8180_24x
 
 Summary:	Linux driver for WLAN card base on rtl8180
-Summary(pl):	Sterownik dla Linuksa do kart bezprzewodowych na chipie 
-rtl8180
+Summary(pl):	Sterownik dla Linuksa do kart bezprzewodowych na chipie rtl8180
 Name:		kernel-net-%{_orig_name}
 Version:	1.2
 %define	_rel	0.4
