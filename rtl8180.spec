@@ -8,11 +8,10 @@ Summary:	Linux driver for WLAN card base on RTL8180
 Summary(pl):	Sterownik dla Linuksa do kart bezprzewodowych na uk³adzie RTL8180
 Name:		kernel-net-rtl8180
 Version:	1.5
-%define		_rel	0.9
+%define		_rel	1
 Release:	%{_rel}@%{_kernel_ver_str}
 License:	GPL
 Group:		Base/Kernel
-#Source0:	ftp://pld:pld@213.186.71.170/pub/rtl8180/rtl8180_linuxdrv_v13.zip
 Source0:	ftp://202.65.194.18/cn/wlan/rtl8180l/rtl8180_linuxdrv_v15_rh90.zip
 # Source0-md5:	85ae591e666c458570ab111cdb39fadb
 Patch0:		%{name}-Makefile.patch
@@ -21,7 +20,7 @@ URL:		http://www.realtek.com.tw/downloads/downloads1-3.aspx?software=True&compam
 %if %{with dist_kernel}
 BuildRequires:	kernel-module-build
 %endif
-BuildRequires:	rpmbuild(macros) >= 1.118
+BuildRequires:	rpmbuild(macros) >= 1.153
 BuildRequires:	unzip
 %{?with_dist_kernel:%requires_releq_kernel_up}
 Requires(post,postun):	/sbin/depmod
@@ -66,6 +65,7 @@ for cfg in %{?with_dist_kernel:%{?with_smp:smp} up}%{!?with_dist_kernel:nondist}
     install -d include/{linux,config}
     ln -sf %{_kernelsrcdir}/config-$cfg .config
     ln -sf %{_kernelsrcdir}/include/linux/autoconf-$cfg.h include/linux/autoconf.h
+    ln -sf %{_kernelsrcdir}/include/asm-%{_target_base_arch} include/asm
     touch include/config/MARKER
     %{__make} -C %{_kernelsrcdir} clean modules \
 	RCS_FIND_IGNORE="-name '*.ko' -o -name priv_part.o -o" \
