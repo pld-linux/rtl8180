@@ -69,20 +69,20 @@ Ten pakiet zawiera modu³ j±dra Linuksa SMP.
 
 %build
 for cfg in %{?with_dist_kernel:%{?with_smp:smp} up}%{!?with_dist_kernel:nondist}; do
-    if [ ! -r "%{_kernelsrcdir}/config-$cfg" ]; then
-	exit 1
-    fi
-    rm -rf include
-    install -d include/{linux,config}
-    ln -sf %{_kernelsrcdir}/config-$cfg .config
-    ln -sf %{_kernelsrcdir}/include/linux/autoconf-$cfg.h include/linux/autoconf.h
-    ln -sf %{_kernelsrcdir}/include/asm-%{_target_base_arch} include/asm
-    touch include/config/MARKER
-    %{__make} -C %{_kernelsrcdir} clean modules \
-	RCS_FIND_IGNORE="-name '*.ko' -o -name priv_part.o -o" \
-	M=$PWD O=$PWD \
-	%{?with_verbose:V=1}
-    mv rtl8180_24x.ko rtl8180_24x-$cfg.ko
+	if [ ! -r "%{_kernelsrcdir}/config-$cfg" ]; then
+		exit 1
+	fi
+	rm -rf include
+	install -d include/{linux,config}
+	ln -sf %{_kernelsrcdir}/config-$cfg .config
+	ln -sf %{_kernelsrcdir}/include/linux/autoconf-$cfg.h include/linux/autoconf.h
+	ln -sf %{_kernelsrcdir}/include/asm-%{_target_base_arch} include/asm
+	touch include/config/MARKER
+	%{__make} -C %{_kernelsrcdir} clean modules \
+		RCS_FIND_IGNORE="-name '*.ko' -o -name priv_part.o -o" \
+		M=$PWD O=$PWD \
+		%{?with_verbose:V=1}
+	mv rtl8180_24x.ko rtl8180_24x-$cfg.ko
 done
 
 %install
