@@ -8,7 +8,7 @@ Summary:	Linux driver for WLAN card base on RTL8180
 Summary(pl):	Sterownik dla Linuksa do kart bezprzewodowych na uk³adzie RTL8180
 Name:		rtl8180
 Version:	1.6
-%define		_rel	5
+%define		_rel	6
 Release:	%{_rel}
 License:	GPL (interface) / closed source (actual driver)
 Group:		Base/Kernel
