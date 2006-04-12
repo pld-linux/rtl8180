@@ -4,20 +4,20 @@
 %bcond_without	smp		# don't build SMP module
 %bcond_with	verbose		# verbose build (V=1)
 #
+%define		_rel	6
 Summary:	Linux driver for WLAN card base on RTL8180
 Summary(pl):	Sterownik dla Linuksa do kart bezprzewodowych na uk³adzie RTL8180
 Name:		rtl8180
 Version:	1.6
-%define		_rel	6
 Release:	%{_rel}
 License:	GPL (interface) / closed source (actual driver)
 Group:		Base/Kernel
-Source0:	ftp://202.65.194.18/cn/wlan/rtl8180l/rtl8180_linuxdrv_v15_rh90.zip
+Source0:	ftp://202.65.194.18/cn/wlan/rtl8180l/%{name}_linuxdrv_v15_rh90.zip
 # Source0-md5:	85ae591e666c458570ab111cdb39fadb
 Patch0:		%{name}-Makefile.patch
 Patch1:		%{name}-timer.patch
 URL:		http://www.realtek.com.tw/downloads/downloads1-3.aspx?software=True&compamodel=RTL8180L
-%{?with_dist_kernel:BuildRequires:	kernel-module-build >= 2.6.7}
+%{?with_dist_kernel:BuildRequires:	kernel-module-build >= 3:2.6.7}
 BuildRequires:	rpmbuild(macros) >= 1.153
 BuildRequires:	unzip
 Obsoletes:	kernel-net-rtl8180_24x
@@ -63,7 +63,7 @@ Sterownik dla Linuksa do kart WLAN opartych o uk³ad RTL8180.
 Ten pakiet zawiera modu³ j±dra Linuksa SMP.
 
 %prep
-%setup -q -n rtl8180_1.5
+%setup -q -n %{name}_1.5
 %patch0 -p1
 %patch1 -p1
 
