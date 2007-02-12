@@ -6,7 +6,7 @@
 #
 %define		_rel	6
 Summary:	Linux driver for WLAN card base on RTL8180
-Summary(pl.UTF-8):   Sterownik dla Linuksa do kart bezprzewodowych na układzie RTL8180
+Summary(pl.UTF-8):	Sterownik dla Linuksa do kart bezprzewodowych na układzie RTL8180
 Name:		rtl8180
 Version:	1.6
 Release:	%{_rel}
@@ -32,7 +32,7 @@ Sterownik dla Linuksa do kart WLAN opartych o układ RTL8180.
 
 %package -n kernel-net-rtl8180
 Summary:	Linux driver for WLAN card base on RTL8180
-Summary(pl.UTF-8):   Sterownik dla Linuksa do kart bezprzewodowych na układzie RTL8180
+Summary(pl.UTF-8):	Sterownik dla Linuksa do kart bezprzewodowych na układzie RTL8180
 Release:	%{_rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 %{?with_dist_kernel:%requires_releq_kernel_up}
@@ -46,7 +46,7 @@ Sterownik dla Linuksa do kart WLAN opartych o układ RTL8180.
 
 %package -n kernel-smp-net-rtl8180
 Summary:	Linux driver for WLAN card base on RTL8180
-Summary(pl.UTF-8):   Sterownik dla Linuksa do kart bezprzewodowych na układzie RTL8180
+Summary(pl.UTF-8):	Sterownik dla Linuksa do kart bezprzewodowych na układzie RTL8180
 Release:	%{_rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 %{?with_dist_kernel:%requires_releq_kernel_smp}
